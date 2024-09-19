@@ -11,19 +11,26 @@ namespace Empresa.Reapository
         public EmpregadoRepository(dbContext dbContext) { 
             this.dbContext = dbContext;
         }
-        public Task<Empregado> AddEmpregado(Empregado empregado)
+        public async Task<Empregado> AddEmpregado(Empregado empregado)
         {
-            throw new NotImplementedException();
+            var result = await dbContext.Empregados.AddAsync(empregado);
+            await dbContext.SaveChangesAsync();
+            return result.Entity;
         }
 
-        public void DeleteEmpregado(int empId)
+        public async void DeleteEmpregado(int empId)
         {
-            throw new NotImplementedException();
+            var result = await dbContext.Empregados.FirstOrDefaultAsync(e => e.EmpId == empId);
+            if (result != null)
+            {
+                dbContext.Empregados.Remove(result);
+                await dbContext.SaveChangesAsync();
+            }
         }
 
-        public Task<Empregado> GetEmpregado(int empId)
+        public async Task<Empregado> GetEmpregado(int empId)
         {
-            throw new NotImplementedException();
+            return await dbContext.Empregados.FirstOrDefaultAsync(e => e.EmpId == empId);
         }
 
         public async Task<IEnumerable<Empregado>> GetEmpregados()
@@ -31,9 +38,34 @@ namespace Empresa.Reapository
             return await dbContext.Empregados.ToListAsync();
         }
 
-        public Task<Empregado> UpdateEmpregado(Empregado empregado)
+        public async Task<Empregado> UpdateEmpregado(Empregado empregado)
         {
-            throw new NotImplementedException();
+            var result = await dbContext.Empregados.FirstOrDefaultAsync(e => e.EmpId == empregado.EmpId);
+            if (result != null)
+            {
+                result.Nome = empregado.Nome;
+                result.Sobrenome = empregado.Sobrenome;
+                result.DepId = empregado.DepId;
+                result.Genero = empregado.Genero;
+                result.Email = empregado.Email;
+                result.FotoUrl = empregado.FotoUrl;
+
+                await dbContext.SaveChangesAsync();
+
+                return result;
+            }
+            return null;
+        }
+        public async Task<Empregado> AssociarEmpregadoAoDepartamento(int empId, int depId)
+        {
+            var empregado = await dbContext.Empregados.FirstOrDefaultAsync(e => e.EmpId == empId);
+            if (empregado != null)
+            {
+                empregado.DepId = depId;
+                empregado.Departamento = await dbContext.Departamentos.FirstOrDefaultAsync(d => d.DepId == depId);
+                await dbContext.SaveChangesAsync();
+            }
+            return empregado;
         }
     }
 }

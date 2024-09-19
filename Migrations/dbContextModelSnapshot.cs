@@ -70,7 +70,20 @@ namespace Empresa.Migrations
 
                     b.HasKey("EmpId");
 
+                    b.HasIndex("DepId");
+
                     b.ToTable("Empregados_PX");
+                });
+
+            modelBuilder.Entity("Empresa.Models.Empregado", b =>
+                {
+                    b.HasOne("Empresa.Models.Departamento", "Departamento")
+                        .WithMany()
+                        .HasForeignKey("DepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Departamento");
                 });
 #pragma warning restore 612, 618
         }

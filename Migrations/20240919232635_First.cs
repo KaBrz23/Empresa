@@ -5,7 +5,7 @@
 namespace Empresa.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class First : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,23 +33,34 @@ namespace Empresa.Migrations
                     Sobrenome = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Email = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Genero = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    DepId = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    FotoUrl = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false)
+                    FotoUrl = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
+                    DepId = table.Column<int>(type: "NUMBER(10)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Empregados_PX", x => x.EmpId);
+                    table.ForeignKey(
+                        name: "FK_Empregados_PX_Departamentos_PX_DepId",
+                        column: x => x.DepId,
+                        principalTable: "Departamentos_PX",
+                        principalColumn: "DepId",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Empregados_PX_DepId",
+                table: "Empregados_PX",
+                column: "DepId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Departamentos_PX");
+                name: "Empregados_PX");
 
             migrationBuilder.DropTable(
-                name: "Empregados_PX");
+                name: "Departamentos_PX");
         }
     }
 }

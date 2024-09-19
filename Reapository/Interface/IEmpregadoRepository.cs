@@ -9,5 +9,6 @@ namespace Empresa.Reapository.Interface
         Task<Empregado> AddEmpregado(Empregado empregado);
         Task<Empregado> UpdateEmpregado(Empregado empregado);
         void DeleteEmpregado(int empId);
+        Task<Empregado> AssociarEmpregadoAoDepartamento(int empId, int depId);
     }
 }

@@ -4,7 +4,12 @@ namespace Empresa.Reapository.Interface
 {
     public interface IDepartamentoRepository
     {
-        IEnumerable<Departamento> GetDepartamento();
-        Departamento GetDepartamento(int id);
+        Task<IEnumerable<Departamento>> GetDepartamentos();
+        Task<Departamento> GetDepartamento(int DepId);
+        Task<Departamento> AddDepartamento(Departamento departamento);
+        Task<Departamento> UpdateDepartamento(Departamento departamento);
+        void DeleteDepartamento(int DepId);
+        Task<IEnumerable<Empregado>> GetEmpregadosPorDepartamento(int depId);
+
     }
 }
